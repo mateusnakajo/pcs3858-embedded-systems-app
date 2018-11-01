@@ -16,7 +16,7 @@ import android.app.ProgressDialog;
 import java.util.UUID;
 import java.io.IOException;
 
-public class Button extends AppCompatActivity {
+public class ButtonManager extends AppCompatActivity {
 
     String address = null;
     String deviceName = null;
@@ -38,12 +38,14 @@ public class Button extends AppCompatActivity {
         setContentView(R.layout.activity_button);
 
         Intent newint = getIntent();
-        deviceName = newint.getStringExtra(Devices.EXTRA_NAME);
-        address = newint.getStringExtra(Devices.EXTRA_ADDRESS);
+        deviceName = newint.getStringExtra(DevicesManager.EXTRA_NAME);
+        address = newint.getStringExtra(DevicesManager.EXTRA_ADDRESS);
 
-        TextView statusView = (TextView)findViewById(R.id.status);
+        TextView statusView = (TextView) findViewById(R.id.status);
 
-        final View roundButton = (View)findViewById(R.id.roundButton);
+        final View roundButton = (View) findViewById(R.id.roundButton);
+
+        final View touchFeedback = (View) findViewById(R.id.touchFeedback);
 
         statusView.setText("Connecting to " + deviceName);
 
@@ -54,13 +56,13 @@ public class Button extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    pressed(roundButton, event);
+                    pressed(roundButton, touchFeedback, event);
 
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    released(roundButton, event);
+                    released(roundButton, touchFeedback, event);
 
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    moved(roundButton, event);
+                    moved(roundButton, touchFeedback, event);
                 }
                 return false;
             }
@@ -68,25 +70,31 @@ public class Button extends AppCompatActivity {
 
     }
 
-    private void pressed(View roundButton, MotionEvent event) {
-        double x = calcX(roundButton, event);
-        double y = calcY(roundButton, event);
+    private void pressed(View roundButton, View touchFeedback, MotionEvent event) {
+        Point point = calcPoint(roundButton, event);
+        changeTouchFeedbackPosition(roundButton, touchFeedback, point);
+        double x = point.getX();
+        double y = point.getY();
         send(buildMessage("1", x, y));
         last_x = x;
         last_y = y;
     }
 
-    private void released(View roundButton, MotionEvent event) {
-        double x = calcX(roundButton, event);
-        double y = calcY(roundButton, event);
+    private void released(View roundButton, View touchFeedback, MotionEvent event) {
+        Point p = calcPoint(roundButton, event);
+        touchFeedback.setAlpha(0);
+        double x = p.getX();
+        double y = p.getY();
         send(buildMessage("0", x, y));
         last_x = x;
         last_y = y;
     }
 
-    private void moved(View roundButton, MotionEvent event) {
-        double x = calcX(roundButton, event);
-        double y = calcY(roundButton, event);
+    private void moved(View roundButton, View touchFeedback, MotionEvent event) {
+        Point point = calcPoint(roundButton, event);
+        changeTouchFeedbackPosition(roundButton, touchFeedback, point);
+        double x = point.getX();
+        double y = point.getY();
         //has x or y changed?
         if ((x != last_x) || (y != last_y)) {
             send(buildMessage("2", x, y));
@@ -95,16 +103,30 @@ public class Button extends AppCompatActivity {
         }
     }
 
-    private double calcX(View roundButton, MotionEvent event) {
+    private Point calcPoint(View roundButton, MotionEvent event) {
         double x = (event.getX() - (roundButton.getWidth() / 2)) / (roundButton.getWidth() / 2);
-        x = (double)Math.round(x * 10000d) / 10000d;
-        return x;
+        double y = (event.getY() - (roundButton.getHeight() / 2)) / (roundButton.getHeight() /2) * -1;
+        double length = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        if (length > 1) {
+            x /= length;
+            y /= length;
+        }
+        x = (double)Math.round(x * 100d) / 100d;
+        y = (double)Math.round(y * 100d) / 100d;
+        return new Point(x, y);
     }
 
-    private double calcY(View roundButton, MotionEvent event) {
-        double y = (event.getY() - (roundButton.getHeight() / 2)) / (roundButton.getHeight() /2) * -1;
-        y = (double)Math.round(y * 10000d) / 10000d;
-        return y;
+    private void changeTouchFeedbackPosition(View roundButton, View touchFeedback, Point point) {
+        int dimension = touchFeedback.getHeight();
+        double transformationFactor = (double) (roundButton.getHeight() - touchFeedback.getHeight());
+        int top = roundButton.getTop() - (int) (transformationFactor * (point.getY() - 1.0) / 2.0);
+        int left = roundButton.getLeft() + (int) (transformationFactor * (point.getX() + 1.0) / 2.0);
+
+        touchFeedback.setLeft(left);
+        touchFeedback.setRight(left + dimension);
+        touchFeedback.setTop(top);
+        touchFeedback.setBottom(top + dimension);
+        touchFeedback.setAlpha(1);
     }
 
     private String buildMessage(String operation, double x, double y) {
@@ -147,7 +169,7 @@ public class Button extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progress = ProgressDialog.show(Button.this, "Connecting", "Please wait...");  //show a progress dialog
+            progress = ProgressDialog.show(ButtonManager.this, "Connecting", "Please wait...");  //show a progress dialog
         }
 
         @Override
@@ -155,8 +177,8 @@ public class Button extends AppCompatActivity {
             try {
                 if (btSocket == null || !isBtConnected) {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
-                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
+                    BluetoothDevice myBluetoothRemoteDevice = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
+                    btSocket = myBluetoothRemoteDevice.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     btSocket.connect();//start connection
                 }

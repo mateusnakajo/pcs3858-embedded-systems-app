@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stuffaboutcode.bluedot.br.stuffaboutcode.bluedot.Button">
+    tools:context="br.usp.rpcar.ButtonManager">
 
     <TextView
         android:id="@+id/status"
@@ -17,9 +17,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="8dp" />
 
-    <Button
-        android:id="@+id/roundButton"
-        android:background="@drawable/round_button"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
@@ -31,6 +29,32 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <ImageView
+            android:id="@+id/roundButtonBackground"
+            android:background="@drawable/round_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:focusable="false" />
+
+        <Button
+            android:id="@+id/roundButton"
+            android:background="@drawable/round_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0" />
+
+        <Button
+            android:id="@+id/touchFeedback"
+            android:background="@drawable/touch_feedback"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:alpha="0"
+            android:clickable="false"
+            android:focusable="false" />
+
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
