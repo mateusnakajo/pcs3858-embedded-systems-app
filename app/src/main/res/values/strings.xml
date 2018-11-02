@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">BlueButton</string>
-    <string name="title_activity_button">Button</string>
+    <string name="app_name">RPCar</string>
+    <string name="title_activity_button">Controle</string>
 </resources>

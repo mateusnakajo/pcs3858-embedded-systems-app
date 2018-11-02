@@ -17,7 +17,7 @@ import android.net.Uri;
 import java.util.Set;
 import java.util.ArrayList;
 
-public class Devices extends AppCompatActivity {
+public class DevicesManager extends AppCompatActivity {
 
     ListView devicelist;
     ImageButton infoButton;
@@ -74,7 +74,7 @@ public class Devices extends AppCompatActivity {
                 list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
             }
         } else {
-            Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No Paired Bluetooth DevicesManager Found.", Toast.LENGTH_LONG).show();
         }
 
         final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
@@ -92,7 +92,7 @@ public class Devices extends AppCompatActivity {
             String address = info.split("\n")[1];
 
             // Make an intent to start next activity.
-            Intent i = new Intent(Devices.this, Button.class);
+            Intent i = new Intent(DevicesManager.this, ButtonManager.class);
 
             //Change the activity.
             i.putExtra(EXTRA_NAME, deviceName);

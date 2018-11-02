@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stuffaboutcode.bluedot.br.stuffaboutcode.bluedot.Devices"
+    tools:context="br.usp.rpcar.DevicesManager"
     tools:layout_editor_absoluteY="80dp"
     tools:layout_editor_absoluteX="0dp">
 
