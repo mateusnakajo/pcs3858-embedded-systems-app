@@ -43,6 +43,10 @@ public class ButtonManager extends AppCompatActivity {
 
         TextView statusView = (TextView) findViewById(R.id.status);
 
+        final View selectionArea = (View) findViewById(R.id.selectionArea);
+
+        final View buttonFrame = (View) findViewById(R.id.roundButtonFrame);
+
         final View roundButton = (View) findViewById(R.id.roundButton);
 
         final View touchFeedback = (View) findViewById(R.id.touchFeedback);
@@ -51,18 +55,18 @@ public class ButtonManager extends AppCompatActivity {
 
         new ConnectBT().execute();
 
-        roundButton.setOnTouchListener(new View.OnTouchListener() {
+        selectionArea.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    pressed(roundButton, touchFeedback, event);
+                    pressed(buttonFrame, roundButton, touchFeedback, event);
 
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    released(roundButton, touchFeedback, event);
+                    released(buttonFrame, roundButton, touchFeedback, event);
 
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    moved(roundButton, touchFeedback, event);
+                    moved(buttonFrame, roundButton, touchFeedback, event);
                 }
                 return false;
             }
@@ -70,8 +74,8 @@ public class ButtonManager extends AppCompatActivity {
 
     }
 
-    private void pressed(View roundButton, View touchFeedback, MotionEvent event) {
-        Point point = calcPoint(roundButton, event);
+    private void pressed(View buttonFrame, View roundButton, View touchFeedback, MotionEvent event) {
+        Point point = calcPoint(buttonFrame, roundButton, event);
         changeTouchFeedbackPosition(roundButton, touchFeedback, point);
         double x = point.getX();
         double y = point.getY();
@@ -80,8 +84,8 @@ public class ButtonManager extends AppCompatActivity {
         last_y = y;
     }
 
-    private void released(View roundButton, View touchFeedback, MotionEvent event) {
-        Point p = calcPoint(roundButton, event);
+    private void released(View buttonFrame, View roundButton, View touchFeedback, MotionEvent event) {
+        Point p = calcPoint(buttonFrame, roundButton, event);
         touchFeedback.setAlpha(0);
         double x = p.getX();
         double y = p.getY();
@@ -90,8 +94,8 @@ public class ButtonManager extends AppCompatActivity {
         last_y = y;
     }
 
-    private void moved(View roundButton, View touchFeedback, MotionEvent event) {
-        Point point = calcPoint(roundButton, event);
+    private void moved(View buttonFrame, View roundButton, View touchFeedback, MotionEvent event) {
+        Point point = calcPoint(buttonFrame, roundButton, event);
         changeTouchFeedbackPosition(roundButton, touchFeedback, point);
         double x = point.getX();
         double y = point.getY();
@@ -103,9 +107,11 @@ public class ButtonManager extends AppCompatActivity {
         }
     }
 
-    private Point calcPoint(View roundButton, MotionEvent event) {
-        double x = (event.getX() - (roundButton.getWidth() / 2)) / (roundButton.getWidth() / 2);
-        double y = (event.getY() - (roundButton.getHeight() / 2)) / (roundButton.getHeight() /2) * -1;
+    private Point calcPoint(View buttonFrame, View roundButton, MotionEvent event) {
+        int topPadding = buttonFrame.getTop();
+        int leftPadding = buttonFrame.getLeft();
+        double x = (event.getX() - leftPadding - (roundButton.getWidth() / 2)) / (roundButton.getWidth() / 2);
+        double y = (event.getY() - topPadding - (roundButton.getHeight() / 2)) / (roundButton.getHeight() /2) * -1;
         double length = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         if (length > 1) {
             x /= length;
@@ -117,8 +123,8 @@ public class ButtonManager extends AppCompatActivity {
     }
 
     private void changeTouchFeedbackPosition(View roundButton, View touchFeedback, Point point) {
-        int dimension = touchFeedback.getHeight();
-        double transformationFactor = (double) (roundButton.getHeight() - touchFeedback.getHeight());
+        int dimension = roundButton.getHeight() / 3;
+        double transformationFactor = roundButton.getHeight() - touchFeedback.getHeight();
         int top = roundButton.getTop() - (int) (transformationFactor * (point.getY() - 1.0) / 2.0);
         int left = roundButton.getLeft() + (int) (transformationFactor * (point.getX() + 1.0) / 2.0);
 

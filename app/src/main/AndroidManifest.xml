@@ -15,8 +15,7 @@
         android:fullBackupContent="false">
         <activity
             android:name=".DevicesManager"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,8 +23,7 @@
         </activity>
         <activity
             android:name=".ButtonManager"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:configChanges="orientation">
         </activity>
     </application>
 
