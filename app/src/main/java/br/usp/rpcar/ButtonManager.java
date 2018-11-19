@@ -117,8 +117,8 @@ public class ButtonManager extends AppCompatActivity {
             x /= length;
             y /= length;
         }
-        x = (double)Math.round(x * 100d) / 100d;
-        y = (double)Math.round(y * 100d) / 100d;
+        x = (double)Math.floor(x * 100d) / 100d;
+        y = (double)Math.floor(y * 100d) / 100d;
         return new Point(x, y);
     }
 
