@@ -1,4 +1,18 @@
 <resources>
-    <string name="app_name">RPCar</string>
-    <string name="title_activity_button">Controle</string>
+    <string name="app_name" translatable="false">RPCar</string>
+    <string name="title_activity_button">Control</string>
+    <string name="status">Status</string>
+    <string name="connect">Connect</string>
+    <string name="connection_lost">Connection lost</string>
+    <string name="connection_fail">Failed to connect</string>
+    <string name="connected_to">Connected to %s</string>
+    <string name="connecting">Connecting</string>
+    <string name="wait">Please wait…</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="broken_pipe">Broken pipe</string>
+    <string name="error_generic">Error : %s</string>
+    <string name="connecting_to">Connecting to %s</string>
+    <string name="error">Error</string>
+    <string name="no_paired_devicesmanager">Bluetooth Pairing Disabled</string>
+    <string name="bt_device_not_available">Bluetooth Device Not Available</string>
 </resources>

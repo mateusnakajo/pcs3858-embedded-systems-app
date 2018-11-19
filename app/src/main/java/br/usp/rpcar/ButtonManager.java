@@ -51,7 +51,7 @@ public class ButtonManager extends AppCompatActivity {
 
         final View touchFeedback = (View) findViewById(R.id.touchFeedback);
 
-        statusView.setText("Connecting to " + deviceName);
+        statusView.setText(String.format(getString(R.string.connecting_to), deviceName));
 
         new ConnectBT().execute();
 
@@ -144,11 +144,11 @@ public class ButtonManager extends AppCompatActivity {
             try {
                 btSocket.getOutputStream().write(message.getBytes());
             } catch (IOException e) {
-                msg("Error : " + e.getMessage());
-                if(e.getMessage().contains("Broken pipe")) Disconnect();
+                msg(String.format(getString(R.string.error_generic), e.getMessage()));
+                if(e.getMessage().contains(getString(R.string.broken_pipe))) Disconnect();
             }
         } else {
-            msg("Error : btSocket == null");
+            msg(String.format(getString(R.string.error_generic), "btSocket == null"));
         }
     }
 
@@ -158,10 +158,10 @@ public class ButtonManager extends AppCompatActivity {
                 isBtConnected = false;
                 btSocket.close();
             } catch (IOException e) {
-                msg("Error");
+                msg(getString(R.string.error));
             }
         }
-        Toast.makeText(getApplicationContext(),"Disconnected",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.disconnected, Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -175,7 +175,7 @@ public class ButtonManager extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progress = ProgressDialog.show(ButtonManager.this, "Connecting", "Please wait...");  //show a progress dialog
+            progress = ProgressDialog.show(ButtonManager.this, getString(R.string.connecting), getString(R.string.wait));  //show a progress dialog
         }
 
         @Override
@@ -199,10 +199,10 @@ public class ButtonManager extends AppCompatActivity {
             super.onPostExecute(result);
 
             if (!ConnectSuccess) {
-                Toast.makeText(getApplicationContext(), "Failed to connect", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.connection_fail, Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                msg("Connected to " + deviceName);
+                msg(String.format(getString(R.string.connected_to), deviceName));
                 isBtConnected = true;
                 // start the connection monitor
                 new MonitorConnection().execute();
@@ -241,7 +241,7 @@ public class ButtonManager extends AppCompatActivity {
                 } catch (IOException e) {
                     // nothing doing, we are ending anyway!
                 }
-                Toast.makeText(getApplicationContext(), "Connection lost", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.connection_lost, Toast.LENGTH_LONG).show();
                 finish();
             }
         }

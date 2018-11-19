@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_button">Controle</string>
+    <string name="status">Estado</string>
+    <string name="connect">Conectar</string>
+    <string name="connection_lost">Conexão perdida</string>
+    <string name="connection_fail">Falha ao conectar</string>
+    <string name="connected_to">Conectado a %s</string>
+    <string name="connecting">Conectando</string>
+    <string name="wait">Aguarde…</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="broken_pipe">Pipe quebrado</string>
+    <string name="error_generic">Error : %s</string>
+    <string name="connecting_to">Conectando-se a %s</string>
+    <string name="error">Erro</string>
+    <string name="no_paired_devicesmanager">Pareamento Bluetooth desativado</string>
+    <string name="bt_device_not_available">Dispositivo Bluetooth indisponível</string>
+</resources>

@@ -16,10 +16,10 @@
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
-        android:text="Status"
+        android:text="@string/status"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <FrameLayout
@@ -37,7 +37,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp" >
 
-        <ImageView
+        <Button
             android:id="@+id/roundButton"
             android:background="@drawable/round_button"
             android:layout_width="match_parent"

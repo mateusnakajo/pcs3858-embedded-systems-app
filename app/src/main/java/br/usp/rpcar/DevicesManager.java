@@ -23,7 +23,6 @@ public class DevicesManager extends AppCompatActivity {
     ImageButton infoButton;
 
     private BluetoothAdapter myBluetooth = null;
-    private Set<BluetoothDevice> pairedDevices;
     public static String EXTRA_ADDRESS = "device_address";
     public static String EXTRA_NAME = "device_name";
 
@@ -39,7 +38,7 @@ public class DevicesManager extends AppCompatActivity {
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
         if(myBluetooth == null) {
-            Toast.makeText(getApplicationContext(), "Bluetooth Device Not Available", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.bt_device_not_available, Toast.LENGTH_LONG).show();
 
             //finish apk
             this.finish();
@@ -73,8 +72,8 @@ public class DevicesManager extends AppCompatActivity {
     }
 
     private void pairedDevicesList() {
-        pairedDevices = myBluetooth.getBondedDevices();
-        ArrayList list = new ArrayList();
+        Set<BluetoothDevice> pairedDevices = myBluetooth.getBondedDevices();
+        ArrayList<String> list = new ArrayList<String>();
 
         if (pairedDevices.size()>0) {
             // create a list of paired bluetooth devices
@@ -83,10 +82,10 @@ public class DevicesManager extends AppCompatActivity {
                 list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
             }
         } else {
-            Toast.makeText(getApplicationContext(), "No Paired Bluetooth DevicesManager Found.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.no_paired_devicesmanager, Toast.LENGTH_LONG).show();
         }
 
-        final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list);
         devicelist.setAdapter(adapter);
         devicelist.setOnItemClickListener(myListClickListener); //Method called when the device from the list is clicked
     }
